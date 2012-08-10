@@ -1299,6 +1299,9 @@ static void htc_input_report(struct input_dev *idev,
 static void multi_input_report(struct atmel_ts_data *ts)
 {
 	uint8_t loop_i, finger_report = 0;
+#ifdef CONFIG_TOUCHSCREEN_ATMEL_SWEEP2WAKE
+  int prevx = 0, nextx = 0;
+#endif
 
 	for (loop_i = 0; loop_i < ts->finger_support; loop_i++) {
 		if (ts->finger_pressed & BIT(loop_i)) {
@@ -2564,7 +2567,6 @@ static int atmel_ts_suspend(struct i2c_client *client, pm_message_t mesg)
 	}
 #endif
 
-
 	cancel_delayed_work_sync(&ts->unlock_work);
 	if (ts->pre_data[0] == RECALIB_UNLOCK && ts->psensor_status)
 		confirm_calibration(ts, 0, 3);
@@ -2695,7 +2697,6 @@ static int atmel_ts_resume(struct i2c_client *client)
 		s2w_switch_changed = false;
 	}
 #endif
-
 	printk(KERN_INFO "%s:[TP]done\n", __func__);
 	return 0;
 }
