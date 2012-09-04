@@ -219,6 +219,10 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 	init_completion(&cpu_work->complete);
 #endif
 
+#ifdef CONFIG_MSM_CPU_FREQ_SET_MIN_MAX
+	policy->min = CONFIG_MSM_CPU_FREQ_MIN;
+	policy->max = CONFIG_MSM_CPU_FREQ_MAX;
+#endif
 	return 0;
 }
 
@@ -231,6 +235,8 @@ static int msm_cpufreq_suspend(void)
 		per_cpu(cpufreq_suspend, cpu).device_suspended = 1;
 		mutex_unlock(&per_cpu(cpufreq_suspend, cpu).suspend_mutex);
 	}
+	if (num_online_cpus() > 1)
+		cpu_down(1);
 
 	return NOTIFY_DONE;
 }
