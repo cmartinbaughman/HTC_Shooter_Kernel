@@ -167,7 +167,7 @@ size_t ksize(const void *);
  */
 #ifdef CONFIG_SLUB
 #include <linux/slub_def.h>
-#elif defined(CONFIG_SLOB)
+#elif defined(CONFIG_SLQB)
 #include <linux/slqb_def.h>
 #elif defined(CONFIG_SLOB)
 #include <linux/slob_def.h>
